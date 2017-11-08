@@ -1,11 +1,12 @@
 import cloud from 'd3-cloud';
 import * as d3 from 'd3';
+import takeDataFromTable from "./data";
 
 const initialFontSize = 13;
 const fontSizeMultiplier = 5;
 
-let makeCloudLayout = ({data, leftLimit, rightLimit}) => {
-    let cloudContainer = document.getElementById('cloud');
+let makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clickFunc, colorConfig}) => {
+    let data = takeDataFromTable({elementId: elementFromId, countId, sentimentId});
 
     let end = (words) => {
         d3.select("#cloud").append("svg")
@@ -18,23 +19,20 @@ let makeCloudLayout = ({data, leftLimit, rightLimit}) => {
             .enter().append("text")
             .attr("class", "tag")
             .attr("text-anchor", "middle")
-            .attr("onclick", d => `(function(ref) { location.href = ref; })(\'${d.reference}\')`)
+            // .attr("onclick", d => `(${clickFunc})()`)
             .style("font-size", d => d.size + "px")
             .style("fill", d => {
-                if(d.sentiment < leftLimit) {
-                    return '#FF0000';
-                }
-                if(d.sentiment >= leftLimit && d.sentiment < rightLimit) {
-                    return '#FFED00';
-                }
-                if(d.sentiment >= rightLimit) {
-                    return '#008000';
+                for(let i = 0; i < colorConfig.length; i++) {
+                    if(d.sentiment >= colorConfig[i].range[0] && d.sentiment <= colorConfig[i].range[1]) {
+                        return colorConfig[i].color;
+                    }
                 }
             })
             .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
             .text(d => d.text);
     };
 
+    let cloudContainer = document.getElementById(elementToId);
     let layout = cloud().size([cloudContainer.clientWidth, cloudContainer.clientHeight])
         .words(data)
         .fontSize(d => Math.floor(initialFontSize + initialFontSize * d.size * fontSizeMultiplier))
@@ -45,6 +43,11 @@ let makeCloudLayout = ({data, leftLimit, rightLimit}) => {
         .on("end", end);
 
     layout.start();
+
+    let tags = document.getElementsByClassName('tag');
+    for(let i = 0; i < tags.length; i++) {
+        tags[i].onclick = clickFunc;
+    }
 };
 
 export default makeCloudLayout;

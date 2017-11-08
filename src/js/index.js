@@ -1,17 +1,43 @@
-import takeDataFromTable from './data';
 import makeCloudLayout from './cloud';
 
 let request = new XMLHttpRequest();
 request.onreadystatechange = () => {
-    if (request.readyState === 4)
+    if (request.readyState === 4) {
         if (request.status === 200) {
             let parser = new DOMParser();
-            let doc = parser.parseFromString(request.responseText, "text/html");
+            let tDocument = parser.parseFromString(request.responseText, "text/html");
 
-            let data = takeDataFromTable({document: doc});
+            let table = tDocument.getElementById("confirmit_agg_table_4");
+            table.style.display = 'none';
+            let body = document.getElementsByTagName('body')[0];
+            body.appendChild(table);
 
-            makeCloudLayout({data, leftLimit: -1, rightLimit: 1})
+            makeCloudLayout({
+                elementFromId: "confirmit_agg_table_4",
+                elementToId: 'cloud',
+                countId: 1,
+                sentimentId: 2,
+                clickFunc: () => {
+                    alert("hello");
+                },
+                colorConfig: [
+                    {
+                        range: [1, 5],
+                        color: '#008000'
+                    },
+                    {
+                        range: [-1, 1],
+                        color: '#FFED00'
+                    },
+                    {
+                        range: [-5, -1],
+                        color: '#FF0000'
+                    }
+                ]
+            });
         }
+    }
 };
+
 request.open('GET', 't2.html', true);
 request.send();
