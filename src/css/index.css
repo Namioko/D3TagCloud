@@ -2,3 +2,7 @@
     width: 700px;
     height: 400px;
 }
+
+.tag:hover {
+    text-decoration: underline;
+}

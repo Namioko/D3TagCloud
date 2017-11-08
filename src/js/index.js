@@ -10,7 +10,7 @@ request.onreadystatechange = () => {
 
             let data = takeDataFromTable({document: doc});
 
-            makeCloudLayout({data})
+            makeCloudLayout({data, leftLimit: -1, rightLimit: 1})
         }
 };
 request.open('GET', 't2.html', true);

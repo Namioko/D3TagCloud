@@ -4,10 +4,8 @@ import * as d3 from 'd3';
 const initialFontSize = 13;
 const fontSizeMultiplier = 5;
 
-let makeCloudLayout = ({data}) => {
+let makeCloudLayout = ({data, leftLimit, rightLimit}) => {
     let cloudContainer = document.getElementById('cloud');
-
-    let fill = d3.scaleOrdinal(d3.schemeCategory20);
 
     let end = (words) => {
         d3.select("#cloud").append("svg")
@@ -18,12 +16,23 @@ let makeCloudLayout = ({data}) => {
             .selectAll("text")
             .data(words)
             .enter().append("text")
+            .attr("class", "tag")
             .attr("text-anchor", "middle")
             .attr("onclick", d => `(function(ref) { location.href = ref; })(\'${d.reference}\')`)
             .style("font-size", d => d.size + "px")
-            .style("fill", (d, i) => fill(i))
+            .style("fill", d => {
+                if(d.sentiment < leftLimit) {
+                    return '#FF0000';
+                }
+                if(d.sentiment >= leftLimit && d.sentiment < rightLimit) {
+                    return '#FFED00';
+                }
+                if(d.sentiment >= rightLimit) {
+                    return '#008000';
+                }
+            })
             .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
-            .text( d => d.text);
+            .text(d => d.text);
     };
 
     let layout = cloud().size([cloudContainer.clientWidth, cloudContainer.clientHeight])
