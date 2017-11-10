@@ -21,11 +21,10 @@ let makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clickF
             .style('font-size', d => d.size + 'px')
             .style('fill', d => {
                 if (colorConfig !== undefined) {
-                    return colorConfig.find(element => {
-                        if (d.sentiment >= element.range[0] && d.sentiment <= element.range[1]) {
-                            return true;
-                        }
-                    }).color;
+                    let index = colorConfig.limiters.findIndex((limiter, index, limiters) => {
+                        return index < limiters.length - 1 && d.sentiment >= limiter && d.sentiment <= limiters[index + 1];
+                    });
+                    return colorConfig.colors[index];
                 } else {
                     return fill(d.ratio);
                 }

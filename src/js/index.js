@@ -20,20 +20,10 @@ request.onreadystatechange = () => {
                 clickFunc: () => {
                     alert("hello");
                 },
-                colorConfig: [
-                    {
-                        range: [1, 5],
-                        color: '#008000'
-                    },
-                    {
-                        range: [-1, 1],
-                        color: '#FFED00'
-                    },
-                    {
-                        range: [-5, -1],
-                        color: '#FF0000'
-                    }
-                ],
+                colorConfig: {
+                    limiters: [-5, -1, 1, 5],
+                    colors: ['#FF0000', '#FFED00', '#008000']
+                },
                 initialFontSize: 13,
                 fontSizeMultiplier: 2
             });
