@@ -32,7 +32,7 @@ let takeDataFromTable = ({elementId, countId, sentimentId}) => {
     }
 
     data.forEach(element => {
-        element.size = element.count * minCount / maxCount;
+        element.ratio = element.count * minCount / maxCount;
     });
 
     return data;

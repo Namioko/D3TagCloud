@@ -33,7 +33,9 @@ request.onreadystatechange = () => {
                         range: [-5, -1],
                         color: '#FF0000'
                     }
-                ]
+                ],
+                initialFontSize: 13,
+                fontSizeMultiplier: 2
             });
         }
     }
