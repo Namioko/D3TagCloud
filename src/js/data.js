@@ -17,7 +17,7 @@ let takeDataFromTable = ({elementId, countId, sentimentId}) => {
         element.count = parseInt(row.children[countId].innerText);
         element.sentiment = parseFloat(row.children[sentimentId].innerText);
 
-        if(isNaN(element.count) || isNaN(element.sentiment) || element.count === 0) { //if row doesn't have any data
+        if (isNaN(element.count) || isNaN(element.sentiment) || element.count === 0) { //if row doesn't have any data
             continue;
         }
 

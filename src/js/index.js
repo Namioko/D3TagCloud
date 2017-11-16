@@ -23,9 +23,7 @@ request.onreadystatechange = () => {
                 colorConfig: {
                     limiters: [-5, -1, 1, 5],
                     colors: ['#FF0000', '#FFED00', '#008000']
-                },
-                initialFontSize: 13,
-                fontSizeMultiplier: 2
+                }
             });
         }
     }
