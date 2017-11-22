@@ -1,7 +1,6 @@
 let takeDataFromTable = ({elementId, countId, sentimentId}) => {
     let data = [];
 
-    let minCount;
     let maxCount = -1;
 
     let element = document.getElementById(elementId);
@@ -23,9 +22,6 @@ let takeDataFromTable = ({elementId, countId, sentimentId}) => {
             continue;
         }
 
-        if (minCount === undefined || minCount > element.count) {
-            minCount = element.count;
-        }
         if (maxCount < element.count) {
             maxCount = element.count;
         }
@@ -34,7 +30,8 @@ let takeDataFromTable = ({elementId, countId, sentimentId}) => {
     }
 
     data.forEach(element => {
-        element.ratio = element.count * minCount / maxCount;
+        element.ratio = element.count / maxCount;
+        element.text = element.text[0].toUpperCase() + element.text.slice(1).toLowerCase();
     });
 
     return data;

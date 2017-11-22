@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 import takeDataFromTable from './data';
 
 const fontSize = {
-    min: 13,
-    max: 40
+    min: 15,
+    max: 80
 };
 
 const makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clickFunc, colorConfig}) => {
