@@ -8,7 +8,11 @@ const fontSize = {
 };
 
 const makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clickFunc, colorConfig}) => {
-    let data = takeDataFromTable({elementId: elementFromId, countId, sentimentId});
+    let data = takeDataFromTable({
+        elementId: elementFromId,
+        countId,
+        sentimentId
+    });
 
     let fill = d3.scaleOrdinal(d3.schemeCategory10);
     let size = d3.scaleLinear()
@@ -28,7 +32,7 @@ const makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clic
             .attr('text-anchor', 'middle')
             .style('font-size', d => d.size + 'px')
             .style('fill', d => {
-                if (colorConfig !== undefined) {
+                if (colorConfig !== undefined && d.sentiment !== undefined) {
                     let index = colorConfig.limiters.findIndex((limiter, index, limiters) => {
                         return index < limiters.length - 1 && d.sentiment >= limiter && d.sentiment <= limiters[index + 1];
                     });

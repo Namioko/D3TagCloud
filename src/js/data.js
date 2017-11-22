@@ -11,13 +11,15 @@ let takeDataFromTable = ({elementId, countId, sentimentId}) => {
         let row = tableBody.children[i]; //row = tr
         let element = {};
 
-        let a = row.children[0].getElementsByTagName('a')[0]; //tr -> td -> a
-        element.text = a.innerText;
+        element.text = row.children[0].innerText;
 
         element.count = parseInt(row.children[countId].innerText);
-        element.sentiment = parseFloat(row.children[sentimentId].innerText);
+        if (sentimentId !== undefined) {
+            element.sentiment = parseFloat(row.children[sentimentId].innerText);
+        }
 
-        if (isNaN(element.count) || isNaN(element.sentiment) || element.count === 0) { //if row doesn't have any data
+        //if row doesn't have any data
+        if (isNaN(element.count) || sentimentId !== undefined && isNaN(element.sentiment) || element.count === 0) {
             continue;
         }
 
