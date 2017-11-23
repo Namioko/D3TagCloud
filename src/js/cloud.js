@@ -19,18 +19,39 @@ const makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clic
         .domain([0, 1])
         .range([fontSize.min, fontSize.max]);
 
+    let update = ({ratio}) => {
+        //to save fontSizes's scale
+        // fontSize.min *= ratio;
+        // fontSize.max *= ratio;
+        // size.range([fontSize.min, fontSize.max]);
+
+        layout.size([cloudContainer.clientWidth, cloudContainer.clientHeight]);
+        layout.stop().words(data).start();
+    };
+
     let end = (words) => {
-        d3.select('#cloud').append('svg')
-            .attr('width', layout.size()[0])
-            .attr('height', layout.size()[1])
-            .append('g')
-            .attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')')
-            .selectAll('text')
-            .data(words)
-            .enter().append('text')
+        svg.attr('width', layout.size()[0]).attr('height', layout.size()[1]);
+
+        g.attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')');
+
+        let text = g.selectAll('text')
+            .data(words);
+
+        text.transition()
+            .duration(1000)
+            .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
+            .style('font-size', d => d.size + 'px');
+
+        text.enter().append('text')
             .attr('class', 'tag')
             .attr('text-anchor', 'middle')
             .style('font-size', d => d.size + 'px')
+            .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
+            .style('font-size', d => d.size + 'px')
+            .style("opacity", 1e-6)
+            .transition()
+            .duration(1000)
+            .style("opacity", 1)
             .style('fill', d => {
                 if (colorConfig !== undefined && d.sentiment !== undefined) {
                     let index = colorConfig.limiters.findIndex((limiter, index, limiters) => {
@@ -41,8 +62,18 @@ const makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clic
                     return fill(d.ratio);
                 }
             })
-            .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
             .text(d => d.text);
+    };
+
+    let oldHeight = window.innerHeight;
+    let oldWidth = window.innerWidth;
+    window.onresize = () => {
+        if (oldHeight !== window.innerHeight && oldWidth === window.innerWidth) {
+            oldHeight = window.innerHeight;
+        } else {
+            update({ratio: window.innerWidth / oldWidth});
+        }
+        oldWidth = window.innerWidth;
     };
 
     const cloudContainer = document.getElementById(elementToId);
@@ -55,6 +86,13 @@ const makeCloudLayout = ({elementFromId, elementToId, countId, sentimentId, clic
         .font('Impact')
         .text(d => d.text)
         .on('end', end);
+
+    let svg = d3.select('#cloud').append('svg')
+        .attr('width', layout.size()[0])
+        .attr('height', layout.size()[1]);
+
+    let g = svg.append('g')
+        .attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')');
 
     layout.start();
 
