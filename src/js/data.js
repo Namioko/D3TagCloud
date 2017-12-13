@@ -1,4 +1,4 @@
-let takeDataFromTable = ({elementId, countId, sentimentId}) => {
+const takeDataFromTable = ({elementId, countId, sentimentId}) => {
     let data = [];
 
     let maxCount = -1;
@@ -37,4 +37,11 @@ let takeDataFromTable = ({elementId, countId, sentimentId}) => {
     return data;
 };
 
-export default takeDataFromTable;
+const takeExceptionsFromSelect = ({elementId}) => {
+    const select = document.getElementById(elementId);
+
+    const selectedOptions = Array.from(select.children).filter(item => item.selected);
+    return selectedOptions.map(item => item.innerText);
+};
+
+export {takeDataFromTable, takeExceptionsFromSelect};

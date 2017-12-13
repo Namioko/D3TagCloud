@@ -1,20 +1,37 @@
 import makeCloudLayout from './cloud';
+import {takeDataFromTable} from "./data";
 
 let request = new XMLHttpRequest();
 request.onreadystatechange = () => {
     if (request.readyState === 4) {
         if (request.status === 200) {
-            let parser = new DOMParser();
-            let tDocument = parser.parseFromString(request.responseText, "text/html");
+            const parser = new DOMParser();
+            const tDocument = parser.parseFromString(request.responseText, "text/html");
 
-            let table = tDocument.getElementById("confirmit_agg_table");
+            const table = tDocument.getElementById("confirmit_agg_table");
             table.style.display = 'none';
-            let body = document.getElementsByTagName('body')[0];
+            const body = document.getElementsByTagName('body')[0];
             body.appendChild(table);
 
-            makeCloudLayout({
+            const data = takeDataFromTable({
+                elementId: "confirmit_agg_table",
+                countId: 1,
+                // sentimentId: 2
+            });
+            const select = document.createElement('select');
+            select.setAttribute('multiple', 'true');
+            select.id = 'exceptions';
+            data.forEach((item, index) => {
+                const option = document.createElement('option');
+                option.text = item.text;
+                select.add(option, index);
+            });
+            body.appendChild(select);
+
+            const {restart: restartCloud} = makeCloudLayout({
                 elementFromId: "confirmit_agg_table",
-                elementToId: 'cloud',
+                elementToId: "cloud",
+                exceptionsFromId: "exceptions",
                 countId: 1,
                 // sentimentId: 2,
                 clickFunc: () => {
@@ -25,6 +42,14 @@ request.onreadystatechange = () => {
                 //     colors: ['#FF0000', '#FFED00', '#008000']
                 // }
             });
+
+            const applyButton = document.createElement('button');
+            applyButton.innerText = 'Apply';
+            applyButton.style.marginLeft = '10px';
+            applyButton.onclick = () => {
+                restartCloud();
+            };
+            body.appendChild(applyButton);
         }
     }
 };
