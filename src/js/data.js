@@ -38,10 +38,11 @@ const takeDataFromTable = ({elementId, countId, sentimentId}) => {
 };
 
 const takeExceptionsFromSelect = ({elementId}) => {
-    const select = document.getElementById(elementId);
+    const selectContainer = document.getElementById(elementId);
+    const select = selectContainer.children[0];
 
     const selectedOptions = Array.from(select.children).filter(item => item.selected);
-    return selectedOptions.map(item => item.innerText);
+    return selectedOptions.map(item => item.innerText[0].toUpperCase() + item.innerText.slice(1).toLowerCase());
 };
 
 export {takeDataFromTable, takeExceptionsFromSelect};

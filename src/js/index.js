@@ -18,15 +18,17 @@ request.onreadystatechange = () => {
                 countId: 1,
                 // sentimentId: 2
             });
+            const selectContainer = document.createElement('div');
+            selectContainer.id = 'exceptions';
             const select = document.createElement('select');
             select.setAttribute('multiple', 'true');
-            select.id = 'exceptions';
             data.forEach((item, index) => {
                 const option = document.createElement('option');
                 option.text = item.text;
                 select.add(option, index);
             });
-            body.appendChild(select);
+            selectContainer.appendChild(select);
+            body.appendChild(selectContainer);
 
             const {restart: restartCloud} = makeCloudLayout({
                 elementFromId: "confirmit_agg_table",
