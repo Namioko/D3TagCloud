@@ -24,6 +24,13 @@ const makeCloudLayout = ({elementFromId, elementToId, exceptionsFromId, countId,
         .domain([0, 1])
         .range([fontSize.min, fontSize.max]);
 
+    let addLinks = () => {
+        let tags = Array.from(document.getElementsByClassName('tag'));
+        tags.forEach(element => {
+            element.onclick = clickFunc;
+        });
+    };
+
     let update = ({ratio}) => {
         //to save fontSizes's scale
         // fontSize.min *= ratio;
@@ -48,10 +55,7 @@ const makeCloudLayout = ({elementFromId, elementToId, exceptionsFromId, countId,
         layout.stop().words([]).start();
         layout.stop().words(data).start();
 
-        let tags = Array.from(document.getElementsByClassName('tag'));
-        tags.forEach(element => {
-            element.onclick = clickFunc;
-        });
+        addLinks();
     };
 
     let end = (words) => {
@@ -123,11 +127,8 @@ const makeCloudLayout = ({elementFromId, elementToId, exceptionsFromId, countId,
 
     layout.start();
 
-    let tags = Array.from(document.getElementsByClassName('tag'));
-    tags.forEach(element => {
-        element.onclick = clickFunc;
-    });
-
+    addLinks();
+    
     return {restart};
 };
 
