@@ -24,7 +24,7 @@ request.onreadystatechange = () => {
             select.setAttribute('multiple', 'true');
             data.forEach((item, index) => {
                 const option = document.createElement('option');
-                option.text = item.text;
+                option.text = item.text.toUpperCase();
                 select.add(option, index);
             });
             selectContainer.appendChild(select);
