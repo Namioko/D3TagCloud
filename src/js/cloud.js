@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 import {takeDataFromTable, takeExceptionsFromSelect} from './data';
 
 const fontSize = {
-    min: 15,
-    max: 80
+    min: 13,
+    max: 38
 };
 
 const makeCloudLayout = ({elementFromId, elementToId, exceptionsFromId, countId, sentimentId, clickFunc, colorConfig}) => {
@@ -108,6 +108,8 @@ const makeCloudLayout = ({elementFromId, elementToId, exceptionsFromId, countId,
     };
 
     const cloudContainer = document.getElementById(elementToId);
+    const prevClassName = cloudContainer.getAttribute('class');
+    cloudContainer.setAttribute('class', (!prevClassName ? '' : prevClassName + ' ') + 'cloud');
 
     let layout = cloud().size([cloudContainer.clientWidth, cloudContainer.clientHeight])
         .words(data)
@@ -118,7 +120,7 @@ const makeCloudLayout = ({elementFromId, elementToId, exceptionsFromId, countId,
         .text(d => d.text)
         .on('end', end);
 
-    let svg = d3.select('#cloud').append('svg')
+    let svg = d3.select(`#${elementToId}`).append('svg')
         .attr('width', layout.size()[0])
         .attr('height', layout.size()[1]);
 

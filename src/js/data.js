@@ -3,7 +3,7 @@ const takeDataFromTable = ({elementId, countId, sentimentId}) => {
 
     let maxCount = -1;
 
-    let element = document.getElementById(elementId);
+    let element = document.querySelector(`#${elementId} table`);
     let tableBody = element.children[1];
 
     for (let i = 0; i < tableBody.children.length; i++) {
@@ -39,6 +39,9 @@ const takeDataFromTable = ({elementId, countId, sentimentId}) => {
 
 const takeExceptionsFromSelect = ({elementId}) => {
     const select = document.querySelector(`#${elementId} > select`);
+    if(!select) {
+        return [];
+    }
 
     const selectedOptions = Array.from(select.children).filter(item => item.selected);
     return selectedOptions.map(item => item.innerText[0].toUpperCase() + item.innerText.slice(1).toLowerCase());
